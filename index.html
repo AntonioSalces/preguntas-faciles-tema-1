@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de 40 Preguntas</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS';
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+        }
+        h1 {
+            color: #333;
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #quizForm {
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .question p {
+            font-size: 1.2em;
+            color: #444;
+        }
+        .question label {
+            display: block;
+            padding: 8px 0;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+        .question input[type="radio"] {
+            margin-right: 10px;
+        }
+        .correct {
+            color: #28a745;
+        }
+        .incorrect {
+            color: #dc3545;
+        }
+        .response {
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .btn {
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .correct, .incorrect {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        #result button {
+            background-color: #28a745;
+            border-radius: 5px;
+            font-size: 1.1em;
+            margin-top: 15px;
+        }
+        #result button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test de 40 Preguntas</h1>
+
+    <form id="quizForm">
+        <div id="questions"></div>
+        <button type="button" class="btn" onclick="showResults()">Comprobar</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        const questions = [
+        { question: "¿Qué es la empresa según la definición clásica?", answers: ["Una unidad de consumo", "Una unidad económica de producción", "Una unidad de distribución"], correctAnswer: 1, justification: "La empresa es una unidad económica de producción en contraposición con la unidad económica de consumo." },
+            { question: "¿Cuál es la función básica de una empresa?", answers: ["Generar lucro", "Transformación de factores en productos", "Distribuir productos"], correctAnswer: 1, justification: "La función básica de la empresa es transformar los factores de producción en productos." },
+            { question: "Según la perspectiva histórica, ¿qué concepto se debe distinguir de la empresa?", answers: ["El concepto de organización", "El concepto de economía", "El concepto de unidad de consumo"], correctAnswer: 2, justification: "La empresa se debe distinguir del concepto de unidad de consumo, ya que la empresa está enfocada en la producción y distribución." },
+            { question: "¿Qué tipo de riesgo asume una empresa?", answers: ["Riesgo económico", "Riesgo legal", "Riesgo tecnológico"], correctAnswer: 0, justification: "La empresa asume riesgos económicos, técnicos y morales." },
+            { question: "¿Qué elementos constituyen una empresa?", answers: ["Elementos humanos, materiales e inmateriales", "Elementos legales y financieros", "Elementos técnicos y económicos"], correctAnswer: 0, justification: "Una empresa se compone de elementos humanos (empleados, directivos), materiales (bienes duraderos y no duraderos), e inmateriales (cultura, organización)." },
+            { question: "¿Qué se entiende por 'empresa como sistema'?", answers: ["Un conjunto de partes interrelacionadas para cumplir un objetivo común", "Una serie de procesos financieros independientes", "Una unidad jurídica autónoma"], correctAnswer: 0, justification: "La empresa se considera un sistema en el que diferentes subsistemas interaccionan para cumplir los objetivos organizacionales." },
+            { question: "¿Cuál de estos no es un subsistema dentro de la empresa?", answers: ["Recursos humanos", "Marketing", "Contabilidad financiera"], correctAnswer: 2, justification: "Contabilidad financiera no se considera un subsistema dentro de la estructura empresarial, mientras que recursos humanos y marketing son esenciales." },
+            { question: "¿Qué decisiones toma un empresario?", answers: ["Estrategias de marketing", "Decisiones estratégicas", "Decisiones operativas diarias"], correctAnswer: 1, justification: "El empresario toma decisiones estratégicas sobre los objetivos a largo plazo y la administración general de la empresa." },
+            { question: "¿Qué describe mejor el entorno empresarial?", answers: ["El mercado laboral y la competencia", "Los productos que se venden", "Las estrategias de marketing de una empresa"], correctAnswer: 0, justification: "El entorno empresarial abarca factores como el mercado laboral, los clientes, competidores y proveedores." },
+            { question: "¿Qué dimensión del entorno empresarial incluye los avances científicos y tecnológicos?", answers: ["Dimensión tecnológica", "Dimensión jurídica", "Dimensión económica"], correctAnswer: 0, justification: "La dimensión tecnológica abarca los avances científicos y tecnológicos que afectan a la empresa." },
+            { question: "¿Cuál es una de las características del emprendedor?", answers: ["No toma riesgos", "Es innovador", "Prefiere trabajar solo"], correctAnswer: 1, justification: "El emprendedor se caracteriza por su capacidad de innovación y por tomar riesgos calculados." },
+            { question: "¿Qué se considera la cultura empresarial?", answers: ["La estructura jerárquica", "El conjunto de valores y creencias compartidas", "El número de empleados"], correctAnswer: 1, justification: "La cultura empresarial se refiere al conjunto de valores, creencias y motivaciones que guían el comportamiento dentro de la empresa." },
+            { question: "¿Cómo se define el empresario?", answers: ["Una persona que invierte dinero en una empresa", "Una persona que toma decisiones estratégicas y asume responsabilidades", "Una persona encargada de la producción"], correctAnswer: 1, justification: "El empresario es la persona que toma decisiones estratégicas y asume la responsabilidad legal y comercial de la empresa." },
+            { question: "¿Qué es un subsistema en la empresa?", answers: ["Una parte de la empresa que opera de forma independiente", "Un conjunto de elementos relacionados para cumplir una función", "Un grupo de empleados que trabajan juntos"], correctAnswer: 1, justification: "Un subsistema dentro de la empresa es un conjunto de elementos organizados que trabajan juntos para cumplir una función específica." },
+            { question: "¿Qué subsistema se encarga de la captación de recursos humanos?", answers: ["Subsistema de marketing", "Subsistema de recursos humanos", "Subsistema de finanzas"], correctAnswer: 1, justification: "El subsistema de recursos humanos se encarga de la captación, selección, formación y desarrollo de los empleados." },
+            { question: "¿Qué se considera un elemento material duradero en una empresa?", answers: ["El conocimiento", "La infraestructura física", "Los bienes de consumo"], correctAnswer: 1, justification: "Los elementos materiales duraderos son la infraestructura física, como edificios, maquinaria y equipos." },
+            { question: "¿Qué dimensión del entorno empresarial afecta directamente al poder adquisitivo de los consumidores?", answers: ["Dimensión sociocultural", "Dimensión económica", "Dimensión internacional"], correctAnswer: 1, justification: "La dimensión económica se refiere a factores como el poder adquisitivo, la tasa de desempleo y las tasas de interés, que afectan a las decisiones de consumo." },
+            { question: "¿Qué hace un emprendedor cuando inicia una empresa?", answers: ["Busca una idea viable y la lleva a cabo", "Compra una empresa ya existente", "Invierte en bienes raíces"], correctAnswer: 0, justification: "El emprendedor identifica una oportunidad de negocio, organiza los recursos necesarios y asume los riesgos para llevarla a cabo." },
+            { question: "¿Qué se entiende por ‘riesgo moral’ en una empresa?", answers: ["El riesgo asociado a la salud de los empleados", "El riesgo derivado de las malas decisiones éticas o legales", "El riesgo financiero de una inversión"], correctAnswer: 1, justification: "El riesgo moral se refiere a los riesgos derivados de decisiones éticas o legales incorrectas dentro de la empresa." },
+            { question: "¿Qué aspecto del entorno empresarial se relaciona con las normas y costumbres de la población?", answers: ["Dimensión económica", "Dimensión sociocultural", "Dimensión jurídica"], correctAnswer: 1, justification: "La dimensión sociocultural aborda las características demográficas, normas y costumbres de la población que influyen en el comportamiento empresarial." },
+            { question: "¿Qué subsistema dentro de la empresa se encarga de la planificación estratégica?", answers: ["Subsistema de recursos humanos", "Subsistema de operaciones", "Subsistema de administración"], correctAnswer: 2, justification: "El subsistema de administración se ocupa de la planificación estratégica, la organización y la dirección del comportamiento dentro de la empresa." },
+            { question: "¿Qué papel juega el subsistema de financiación?", answers: ["Gestiona la comercialización de productos", "Busca fondos para financiar actividades y distribuirlos", "Controla la calidad de los productos"], correctAnswer: 1, justification: "El subsistema de financiación busca los recursos financieros necesarios para la empresa y los distribuye entre las diversas áreas." },
+            { question: "¿Qué describe mejor al concepto de 'empresa'?", answers: ["Una organización con fines de lucro", "Una unidad jurídica que se dedica a producir bienes y servicios", "Un grupo de empleados que trabajan juntos"], correctAnswer: 1, justification: "La empresa es una unidad económica cuya función es producir bienes y servicios con el objetivo de obtener lucro." },
+            { question: "¿Cuál es la principal actividad de un subsistema de comercialización?", answers: ["Fabricación de productos", "Distribución y venta de productos", "Gestión de recursos humanos"], correctAnswer: 1, justification: "El subsistema de comercialización o marketing se encarga de la venta y distribución de los productos y servicios de la empresa." },
+            { question: "¿Qué es la misión de una empresa?", answers: ["Una descripción de los objetivos estratégicos a corto plazo", "Una declaración del propósito y los valores fundamentales de la empresa", "El nombre de la empresa"], correctAnswer: 1, justification: "La misión de una empresa define su propósito, valores fundamentales y los objetivos a largo plazo que guían sus actividades." },
+            { question: "¿Cuál es una característica clave de los emprendedores?", answers: ["Evitan el riesgo a toda costa", "Son innovadores y tienen una alta tolerancia al riesgo", "Prefieren trabajar de manera independiente sin ayuda"], correctAnswer: 1, justification: "Los emprendedores son innovadores y tienen una alta tolerancia al riesgo para aprovechar nuevas oportunidades de negocio." },
+            { question: "¿Cómo se mide la productividad de una empresa?", answers: ["Por la cantidad de empleados", "Por el número de productos fabricados", "Por la eficiencia en el uso de los recursos para generar productos"], correctAnswer: 2, justification: "La productividad se mide por la eficiencia en la utilización de los recursos para generar productos y servicios que satisfagan las necesidades del mercado." },
+            { question: "¿Qué subsistema en una empresa se ocupa de la obtención de insumos?", answers: ["Subsistema de aprovisionamiento", "Subsistema de producción", "Subsistema de marketing"], correctAnswer: 0, justification: "El subsistema de aprovisionamiento se encarga de la adquisición y gestión de los recursos necesarios para las actividades de la empresa." },
+            { question: "¿Qué subsistema se encarga de la evaluación de desempeño en la empresa?", answers: ["Subsistema de recursos humanos", "Subsistema de administración", "Subsistema de operaciones"], correctAnswer: 1, justification: "El subsistema de administración evalúa el desempeño organizacional a través de la planificación, control y seguimiento de los objetivos establecidos." },
+            { question: "¿Qué hace el subsistema de operaciones dentro de la empresa?", answers: ["Gestiona los recursos humanos", "Desarrolla los productos o servicios", "Planifica la estrategia financiera"], correctAnswer: 1, justification: "El subsistema de operaciones se encarga de la producción o desarrollo de los bienes y servicios que ofrece la empresa." },
+            { question: "¿Qué subsistema dentro de la empresa está a cargo de la gestión de los recursos financieros?", answers: ["Subsistema de finanzas", "Subsistema de recursos humanos", "Subsistema de marketing"], correctAnswer: 0, justification: "El subsistema de finanzas se ocupa de la gestión de los recursos financieros, tanto para financiar las actividades como para la inversión." }
+        ];
+
+        function renderQuestions() {
+            const questionContainer = document.getElementById("questions");
+            questions.forEach((question, index) => {
+                const questionElement = document.createElement("div");
+                questionElement.classList.add("question");
+
+                const questionText = document.createElement("p");
+                questionText.innerText = `${index + 1}. ${question.question}`;
+                questionElement.appendChild(questionText);
+
+                question.answers.forEach((answer, i) => {
+                    const label = document.createElement("label");
+                    label.innerHTML = `
+                        <input type="radio" name="q${index}" value="${i}" onclick="checkAnswer(${index}, ${i})">
+                        ${answer}
+                    `;
+                    questionElement.appendChild(label);
+                    questionElement.appendChild(document.createElement("br"));
+                });
+
+                questionElement.appendChild(document.createElement("div"));
+                questionContainer.appendChild(questionElement);
+            });
+        }
+
+        function checkAnswer(questionIndex, selectedValue) {
+            const question = questions[questionIndex];
+            const responseElement = document.createElement("div");
+            const questionElement = document.getElementsByClassName("question")[questionIndex];
+            
+            const feedback = questionElement.getElementsByTagName("div")[0];
+            feedback.innerHTML = ""; // Limpiar feedback anterior
+
+            if (selectedValue === question.correctAnswer) {
+                feedback.classList.add("correct");
+                feedback.innerText = `Correcto: ${question.justification}`;
+            } else {
+                feedback.classList.add("incorrect");
+                feedback.innerText = `Incorrecto. ${question.justification}`;
+            }
+        }
+
+        function showResults() {
+            let score = 0;
+            questions.forEach((question, index) => {
+                const selectedAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selectedAnswer !== null) {
+                    const answerValue = parseInt(selectedAnswer.value);
+                    if (answerValue === question.correctAnswer) {
+                        score += 0.25;
+                    } else {
+                        score -= 0.25;
+                    }
+                }
+            });
+
+            const totalScore = document.createElement("p");
+            totalScore.innerText = `Nota final: ${score.toFixed(2)} / 10`;
+            const button = document.createElement("button");
+            button.classList.add("btn");
+            button.innerText = "Corregir";
+            button.onclick = () => location.reload();
+            document.getElementById("result").appendChild(totalScore);
+            document.getElementById("result").appendChild(button);
+        }
+
+        renderQuestions();
+    </script>
+</body>
+</html>
